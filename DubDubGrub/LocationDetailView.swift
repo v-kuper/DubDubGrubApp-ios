@@ -12,29 +12,21 @@ struct LocationDetailView: View {
     
     var body: some View {
         VStack (spacing: 16) {
-            Image("default-banner-asset")
-                .resizable()
-                .scaledToFill()
-                .frame(height: 120)
+            BannerImageView(imageName: "default-banner-asset")
             
             HStack{
-                Label("123 Main Street", systemImage: "mappin.and.ellipse")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                AddressView(address: "123 Main Street")
                 Spacer()
             }
             .padding(.horizontal)
-            
-            Text("This is a description of the location that will be displayed here in detail view of the app when tapped on the location card. This is a description of the location that will be displayed here in detail view of the app when tapped on the location card.")
-                .lineLimit(3)
-                .minimumScaleFactor(0.75)
-                .frame(height: 70)
-                .padding(.horizontal)
+        
+            DescriptionView(text: "This is a description of the location that will be displayed here in detail view of the app when tapped on the location card. This is a description of the location that will be displayed here in detail view of the app when tapped on the location card.")
             
             ZStack {
                 Capsule()
                     .frame(height: 80)
                     .foregroundColor(Color(.secondarySystemBackground))
+                
                 HStack(spacing: 20) {
                     Button {
                         
@@ -61,6 +53,7 @@ struct LocationDetailView: View {
             Text("Who's Here?")
                 .bold()
                 .font(.title2)
+            
             ScrollView {
                 LazyVGrid(
                     columns: columns,
@@ -115,5 +108,35 @@ struct FirstNameAvatarView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
         }
+    }
+}
+
+struct BannerImageView: View {
+    var imageName: String
+    var body: some View {
+        Image(imageName)
+            .resizable()
+            .scaledToFill()
+            .frame(height: 120)
+    }
+}
+
+struct AddressView: View {
+    var address: String
+    var body: some View {
+        Label(address, systemImage: "mappin.and.ellipse")
+            .font(.caption)
+            .foregroundColor(.secondary)
+    }
+}
+
+struct DescriptionView: View {
+    var text: String
+    var body: some View {
+        Text(text)
+            .lineLimit(3)
+            .minimumScaleFactor(0.75)
+            .frame(height: 70)
+            .padding(.horizontal)
     }
 }
