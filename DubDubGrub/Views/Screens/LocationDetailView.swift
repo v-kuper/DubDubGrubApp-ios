@@ -10,17 +10,19 @@ import SwiftUI
 struct LocationDetailView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
+    var location: DDGLocation
+    
     var body: some View {
         VStack (spacing: 16) {
             BannerImageView(imageName: "default-banner-asset")
             
             HStack{
-                AddressView(address: "123 Main Street")
+                AddressView(address: location.address)
                 Spacer()
             }
             .padding(.horizontal)
         
-            DescriptionView(text: "This is a description of the location that will be displayed here in detail view of the app when tapped on the location card. This is a description of the location that will be displayed here in detail view of the app when tapped on the location card.")
+            DescriptionView(text: location.description)
             
             ZStack {
                 Capsule()
@@ -33,7 +35,7 @@ struct LocationDetailView: View {
                     } label: {
                         LocationActionButton(color: .brandPrimary, imageName: "location.fill")
                     }
-                    Link(destination: URL(filePath: "https://www.apple.com")!, label: {
+                    Link(destination: URL(filePath: location.websiteURL), label: {
                         LocationActionButton(color: .brandPrimary, imageName: "network")
                     })
                     Button {
@@ -68,14 +70,14 @@ struct LocationDetailView: View {
             }
             Spacer()
         }
-        .navigationTitle("Location name")
+        .navigationTitle(location.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
     NavigationView {
-        LocationDetailView()
+        LocationDetailView(location: MockData.location)
     }
 }
 
