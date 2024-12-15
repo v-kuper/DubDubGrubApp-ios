@@ -22,6 +22,20 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
+        .onAppear{
+            FirestoreManager.getLocations { result in
+                switch result {
+                case .success(let locations):
+                    print(locations)
+                    for location in locations {
+                                print("Локация: \(location.name), Адрес: \(location.address)")
+                                print("Координаты: \(location.location.latitude), \(location.location.longitude)")
+                            }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 }
 
