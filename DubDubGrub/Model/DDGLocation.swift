@@ -8,13 +8,13 @@ import FirebaseFirestore
 
 struct DDGLocation: Codable {
     
-    static let kName = "name"
+    static let kName        = "name"
     static let kDescription = "description"
     static let kSquareAsset = "squareAsset"
     static let kBannerAsset = "bannerAsset"
-    static let kAddress = "address"
-    static let kLocation = "location"
-    static let kWebsiteURL = "websiteURL"
+    static let kAddress     = "address"
+    static let kLocation    = "location"
+    static let kWebsiteURL  = "websiteURL"
     static let kPhoneNumber = "phoneNumber"
     
     @DocumentID var documentID: String?  // ID документа в Firestore
@@ -31,19 +31,32 @@ struct DDGLocation: Codable {
     init(document: DocumentSnapshot) {
         let data = document.data() ?? [:]
         
-        self.documentID = document.documentID
-        self.name = data[DDGLocation.kName] as? String ?? "N/A"
-        self.description = data[DDGLocation.kDescription] as? String ?? "N/A"
-        self.squareAsset = data[DDGLocation.kSquareAsset] as? String ?? "N/A"
-        self.bannerAsset = data[DDGLocation.kBannerAsset] as? String ?? "N/A"
-        self.address = data[DDGLocation.kAddress] as? String ?? "N/A"
-        self.websiteURL = data[DDGLocation.kWebsiteURL] as? String ?? "N/A"
-        self.phoneNumber = data[DDGLocation.kPhoneNumber] as? String ?? "N/A"
+        self.documentID     = document.documentID
+        self.name           = data[DDGLocation.kName] as? String ?? "N/A"
+        self.description    = data[DDGLocation.kDescription] as? String ?? "N/A"
+        self.squareAsset    = data[DDGLocation.kSquareAsset] as? String ?? "N/A"
+        self.bannerAsset    = data[DDGLocation.kBannerAsset] as? String ?? "N/A"
+        self.address        = data[DDGLocation.kAddress] as? String ?? "N/A"
+        self.websiteURL     = data[DDGLocation.kWebsiteURL] as? String ?? "N/A"
+        self.phoneNumber    = data[DDGLocation.kPhoneNumber] as? String ?? "N/A"
         
         if let geoPoint = data[DDGLocation.kLocation] as? GeoPoint {
-            self.location = geoPoint
+            self.location   = geoPoint
         } else {
-            self.location = GeoPoint(latitude: 0.0, longitude: 0.0) // Дефолтное значение
+            self.location   = GeoPoint(latitude: 0.0, longitude: 0.0) // Дефолтное значение
         }
+    }
+    
+    // Инициализатор для создания новых объектов вручную
+    init(documentID: String? = nil, name: String, description: String, squareAsset: String, bannerAsset: String, address: String, location: GeoPoint, websiteURL: String, phoneNumber: String) {
+        self.documentID = documentID
+        self.name = name
+        self.description = description
+        self.squareAsset = squareAsset
+        self.bannerAsset = bannerAsset
+        self.address = address
+        self.location = location
+        self.websiteURL = websiteURL
+        self.phoneNumber = phoneNumber
     }
 }
