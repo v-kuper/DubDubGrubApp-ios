@@ -9,36 +9,22 @@ import SwiftUI
 import MapKit
 
 struct LocationMapView: View {
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 52.4345, longitude: 30.9754),
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
     
-    @State private var alertItem: AlertItem?
+    @StateObject private var viewModel = LocationMapViewModel()
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region).ignoresSafeArea()
-            
+            Map(coordinateRegion: $viewModel.region).ignoresSafeArea()
             VStack {
                 LogoView().shadow(radius: 10)
                 Spacer()
             }
         }
-        .alert(item: $alertItem, content: { alertItem in
+        .alert(item: $viewModel.alertItem, content: { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         })
         .onAppear{
-            FirestoreManager.getLocations { result in
-                switch result {
-                case .success(let locations):
-                    for location in locations {
-                                print("Локация: \(location.name), Адрес: \(location.address)")
-                                print("Координаты: \(location.location.latitude), \(location.location.longitude)")
-                            }
-                case .failure(_):
-                    alertItem = AlertContext.unableToGetLocations
-                }
-            }
+            viewModel.getLocations()
         }
     }
 }
