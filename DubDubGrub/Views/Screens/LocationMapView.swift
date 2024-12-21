@@ -13,6 +13,8 @@ struct LocationMapView: View {
         center: CLLocationCoordinate2D(latitude: 52.4345, longitude: 30.9754),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
     
+    @State private var alertItem: AlertItem?
+    
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region).ignoresSafeArea()
@@ -22,17 +24,19 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
+        .alert(item: $alertItem, content: { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+        })
         .onAppear{
             FirestoreManager.getLocations { result in
                 switch result {
                 case .success(let locations):
-                    print(locations)
                     for location in locations {
                                 print("Локация: \(location.name), Адрес: \(location.address)")
                                 print("Координаты: \(location.location.latitude), \(location.location.longitude)")
                             }
-                case .failure(let error):
-                    print(error.localizedDescription)
+                case .failure(_):
+                    alertItem = AlertContext.unableToGetLocations
                 }
             }
         }
