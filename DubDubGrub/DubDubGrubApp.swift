@@ -21,10 +21,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct DubDubGrubApp: App {
     // register app delegate for Firebase setup
       @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    let locationManager = LocationManager()
 
     var body: some Scene {
         WindowGroup {
-            AppTabView()
+            AppTabView().environmentObject(locationManager)
         }
     }
 }

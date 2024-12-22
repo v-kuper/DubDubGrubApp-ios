@@ -11,18 +11,18 @@ import MapKit
 final class LocationMapViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     
-    @Published var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 52.4345, longitude: 30.9754),
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.331516,
+                                                                                  longitude: -121.891054),
+                                                   span: MKCoordinateSpan(latitudeDelta: 0.01,
+                                                                          longitudeDelta: 0.01))
     
-    @Published var locations: [DDGLocation] = []
     
-    func getLocations() {
-            FirestoreManager.getLocations { result in
+    func getLocations(for locationManager: LocationManager) {
+        FirestoreManager.getLocations { [self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let locations):
-                        self.locations = locations
+                        locationManager.locations = locations
                     case .failure(_):
                         self.alertItem = AlertContext.unableToGetLocations
                     }

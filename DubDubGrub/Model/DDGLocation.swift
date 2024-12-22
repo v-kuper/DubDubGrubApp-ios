@@ -4,9 +4,10 @@
 //  Created by Vitali Kupratsevich on 15.12.24.
 //
 
+import MapKit
 import FirebaseFirestore
 
-struct DDGLocation: Codable {
+struct DDGLocation: Codable, Identifiable {
     
     static let kName        = "name"
     static let kDescription = "description"
@@ -17,7 +18,8 @@ struct DDGLocation: Codable {
     static let kWebsiteURL  = "websiteURL"
     static let kPhoneNumber = "phoneNumber"
     
-    @DocumentID var documentID: String?  // ID документа в Firestore
+    
+    @DocumentID var id: String?  // ID документа в Firestore
     let name: String
     let description: String
     let squareAsset: String
@@ -31,7 +33,7 @@ struct DDGLocation: Codable {
     init(document: DocumentSnapshot) {
         let data = document.data() ?? [:]
         
-        self.documentID     = document.documentID
+        self.id     = document.documentID
         self.name           = data[DDGLocation.kName] as? String ?? "N/A"
         self.description    = data[DDGLocation.kDescription] as? String ?? "N/A"
         self.squareAsset    = data[DDGLocation.kSquareAsset] as? String ?? "N/A"
@@ -49,7 +51,7 @@ struct DDGLocation: Codable {
     
     // Инициализатор для создания новых объектов вручную
     init(documentID: String? = nil, name: String, description: String, squareAsset: String, bannerAsset: String, address: String, location: GeoPoint, websiteURL: String, phoneNumber: String) {
-        self.documentID = documentID
+        self.id = documentID
         self.name = name
         self.description = description
         self.squareAsset = squareAsset
@@ -58,5 +60,11 @@ struct DDGLocation: Codable {
         self.location = location
         self.websiteURL = websiteURL
         self.phoneNumber = phoneNumber
+    }
+}
+
+extension DDGLocation {
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
     }
 }
